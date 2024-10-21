@@ -6,18 +6,25 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.svaisser.listaCompras.utils.Utils;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.var;
+
+import org.springframework.web.bind.annotation.PutMapping;
+
 @RestController
-@RequestMapping(value = "/compras")
+@RequestMapping("/compras")
 
 public class ComprasController {
 
     @Autowired
-    private IComprasRepository userRepository;
+    private IComprasRepository comprasRepository;
 
     @PostMapping("/")
     public ResponseEntity<?> create(@RequestBody List<ComprasModel> comprasModelList) {
@@ -26,12 +33,12 @@ public class ComprasController {
         List<String> adicionados = new ArrayList<String>();
 
         for (ComprasModel comprasModel : comprasModelList) {
-            var user = this.userRepository.findByItem(comprasModel.getItem());
+            var compras = this.comprasRepository.findByItem(comprasModel.getItem());
 
-            if (user != null) {
-                duplicados.add(comprasModel.getItem()); 
+            if (compras != null) {
+                duplicados.add(comprasModel.getItem());
             } else {
-                this.userRepository.save(comprasModel); 
+                this.comprasRepository.save(comprasModel);
                 adicionados.add(comprasModel.getItem());
             }
         }
@@ -47,12 +54,28 @@ public class ComprasController {
                     .append(String.join(", ", adicionados)).append(".");
         }
 
-        
         if (adicionados.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message.toString());
         } else {
             return ResponseEntity.status(HttpStatus.CREATED).body(message.toString());
         }
 
+    }
+
+    @SuppressWarnings({ "rawtypes", "unused" })
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody ComprasModel comprasModel, @PathVariable Integer id,
+            HttpServletRequest request) {
+        var compras = this.comprasRepository.findById(id);
+        System.out.println(compras);
+
+        if (compras == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Compra não encontrada.");
+        } else {
+            Utils.copyNonNullProperties(comprasModel, compras);
+            var result = this.comprasRepository.save(compras);
+
+            return ResponseEntity.ok().body("Compra Editada com sucesso! " + result);
+        }
     }
 }
