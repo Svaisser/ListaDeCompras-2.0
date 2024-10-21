@@ -45,13 +45,13 @@ public class ComprasController {
 
         StringBuilder message = new StringBuilder();
         if (!duplicados.isEmpty()) {
-            message.append("Os seguintes itens já estavam na lista e não foram adicionados: ")
-                    .append(String.join(", ", duplicados)).append(". ");
+            message.append("Os itens já estavam, logo não foram add: \n")
+                    .append(String.join(", ", duplicados)).append(". \n");
         }
 
         if (!adicionados.isEmpty()) {
-            message.append("Os seguintes itens foram adicionados com sucesso: ")
-                    .append(String.join(", ", adicionados)).append(".");
+            message.append("Os seguintes itens foram adicionados com sucesso: \n")
+                    .append(String.join(", ", adicionados)).append(".\n");
         }
 
         if (adicionados.isEmpty()) {

@@ -14,5 +14,15 @@
     "item": "Pitaya",
     "quantia": 3,
     "id": 1
+  },
+  {
+    "item": "Uva",
+    "quantia": 6,
+    "id": 2
+  },
+  {
+    "item": "Cereal",
+    "quantia": 1,
+    "id": 3
   }
 ]

@@ -5,20 +5,19 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
   $scope.ErroInclusao = '';
 
   $scope.carregarCompras = function () {
-    $http(
-      {
-        url: 'compras.json',
-        method: 'GET'
-      }).then(function (response) {
-        $scope.listaCompras = response.data;
-      })
+    return $http({
+      url: 'compras.json',
+      method: 'GET'
+    }).then(function (response) {
+      $scope.listaCompras = response.data;
+    })
   }
 
   $scope.enviarCompras = function () {
     const url = 'http://localhost:8080/compras/';
     const data = $scope.listaCompras;
 
-    $http.post(url, data)
+    return $http.post(url, data)
       .then(function (response) {
         console.log('Sucesso:', response.data);
       })
@@ -26,8 +25,8 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
         console.error('Erro:', error);
       });
   };
-
-  $scope.carregarCompras();
+  
+  $scope.carregarCompras().then($scope.enviarCompras);
 
   function getNextId() {
     if ($scope.listaCompras.length === 0) {
@@ -99,7 +98,7 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
     $http({
       url: url,
       method: 'POST',
-      data: $scope.bd_compra 
+      data: $scope.bd_compra
     }).then(function (response) {
       console.log('Sucesso:', response.data);
     }).catch(function (error) {
