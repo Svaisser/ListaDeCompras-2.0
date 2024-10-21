@@ -6,18 +6,18 @@ Essa é uma versão mais completa da lista de compras anterior a qual tinha apen
 
 ### Back-end
 
-Siga o caminho abaixo e execute a aplicação.
+Siga o caminho abaixo e execute a aplicação. <br>
 backend/listaCompras/src/main/java/br/com/svaisser/listaCompras/ListaComprasApplication.java
 
 #### Banco de dados Teste
 
-http://localhost:8080/h2-console/
-Login: admin
-Password: admin
-O H2 é configurado em backend/listaCompras/src/main/resources/application.properties
+http://localhost:8080/h2-console/ <br>
+Login: admin <br>
+Password: admin <br>
+O H2 é configurado em backend/listaCompras/src/main/resources/application.properties <br>
 
 ### Front-end
 
-cd frontend
-npm install
-npm start
+cd frontend<br>
+npm install<br>
+npm start<br>
