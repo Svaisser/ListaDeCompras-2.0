@@ -1,0 +1,10 @@
+<!-- Modal de confirmação -->
+<div class="modal" ng-show="mostrarModalConfirmacao">
+  <div class="modal-content">
+    <h2>Confirmação de exclusão</h2>
+
+    <p>Você tem certeza que deseja excluir o item "{{ itemParaExcluir }}"?</p>
+    <button ng-click="cancelarExclusao()">Cancelar</button>
+    <button ng-click="confirmarExclusao()">Deletar</button>
+  </div>
+</div>

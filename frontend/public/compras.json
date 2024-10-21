@@ -1,0 +1,29 @@
+[
+  {
+    "item": "Ovos",
+    "quantia": 6,
+    "id": 1
+  },
+  {
+    "item": "Banana",
+    "quantia": 3,
+    "id": 3,
+    "descricao": "CELULAR"
+  },
+  {
+    "item": "Morango",
+    "quantia": "2",
+    "id": 5,
+    "descricao": "Creme de leite e açucar se lembrar"
+  },
+  {
+    "item": "Abacate",
+    "quantia": 2,
+    "id": 2
+  },
+  {
+    "item": "Espinafre",
+    "quantia": 7,
+    "id": 4
+  }
+]

@@ -1,0 +1,26 @@
+<!-- Modal de Detalhes da Compra -->
+<div class="detalhes" id="modalDetalhesCompra" ng-show="mostrarDetalhes">
+  <div class="detalhes-content">
+    <span class="close" ng-click="fecharDetalhes()">&times;</span>
+    <h2>Detalhes da Compra</h2>
+
+    <div class="compra-detalhes">
+      <form action="" method="post">
+        <div class="input-details">
+          <p><strong>Item:</strong> <input type="text" ng-model="compraDetalhes.item"
+              placeholder="{{compraDetalhes.item}}"></p>
+          <p><strong>Quantidade:</strong> <input ng-model="compraDetalhes.quantia"
+              placeholder="{{compraDetalhes.quantia}}"></p>
+          <p class="detalhes-input"><strong>Descrição:</strong>
+            <textarea type="text" ng-model="compraDetalhes.descricao" placeholder="{{compraDetalhes.descricao}}" ng-keyup="ajustarAltura($event)"></textarea></p>
+        </div>
+      </form>
+    </div>
+
+    <div class="detalhes-actions">
+      <button type="button" ng-click="editarDetalhes(compraDetalhes)">Editar</button>
+      <button type="button" ng-click="fecharDetalhes()">Fechar</button>
+    </div>
+
+  </div>
+</div>
