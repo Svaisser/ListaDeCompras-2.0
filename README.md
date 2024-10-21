@@ -1,6 +1,24 @@
 # Lista de Compras 2.0
 
-Essa é uma versão mais completa da lista de compras anterior a qual tinha apenas o front end, já nesta nova versão dividi o projeto em 2 pastas/portas onde uma estará rodando o front e a outra o back com acesso a um banco de dados em memória H2.
+<p align="center">
+  <img alt="Página da lista de compras" src=".github/frontend.jpg" width="100%" style="border-radius:16px;">
+</p>
+
+## Índice
+- [Descrição](#descrição)
+- [Tecnologias](#tecnologias)
+- [Rodando o Projeto](#rodando-o-projeto)
+
+## Descrição
+A Lista de Compras 2.0 é uma aplicação web para gerenciar uma lista de compras, utilizando uma arquitetura full stack. Esta versão oferece persistência de dados, integração de API, e um design otimizado para facilitar o gerenciamento das compras.
+
+
+## Tecnologias
+- **Back-end:** Java, Spring Boot
+- **Banco de Dados:** H2 (em memória)
+- **Front-end:** JavaScript, AngularJS
+- **Gerenciamento de dependências:** Maven, npm
+
 
 ## Rodando o projeto
 
