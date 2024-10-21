@@ -25,10 +25,9 @@ A Lista de Compras 2.0 é uma aplicação web para gerenciar uma lista de compra
 - **Gerenciamento de dependências:** Maven, npm
 
 ## Funcionalidades
-- [x] Adicionar itens da lista de compras
+- [x] Adicionar, editar e remover itens da lista de compras
 
 ## Roadmap
-- [ ] Editar e remover itens da lista de compras
 - [ ] Sincronização em tempo real entre front-end e back-end
 - [ ] Banco de dados H2 em memória
 - [ ] Implementar autenticação de usuário
