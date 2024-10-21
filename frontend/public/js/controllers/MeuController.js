@@ -46,6 +46,7 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
 
   $scope.adicionarCompra = function () {
     $scope.ErroInclusao = '';
+    $scope.bd_compra = [];
 
     var item = $scope.frmCompras.item;
     var quantia = $scope.frmCompras.quantia;
@@ -60,6 +61,12 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
     }
 
     $scope.listaCompras.push({
+      "item": item,
+      "quantia": quantia,
+      "id": id
+    });
+
+    $scope.bd_compra.push({
       "item": item,
       "quantia": quantia,
       "id": id
@@ -85,7 +92,19 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
       "quantia": ""
     };
 
-    enviarCompras()
+    //Posta no back end.
+    const url = 'http://localhost:8080/compras/';
+    const data = $scope.listaCompras;
+
+    $http({
+      url: url,
+      method: 'POST',
+      data: $scope.bd_compra 
+    }).then(function (response) {
+      console.log('Sucesso:', response.data);
+    }).catch(function (error) {
+      console.error('Erro:', error);
+    });
   };
 
   $scope.mostrarModalConfirmacao = false;
