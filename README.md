@@ -1,4 +1,7 @@
-# Lista de Compras 2.0
+# 🛒 Lista de Compras 2.0 🛒
+
+## Status do Projeto
+🚧 Projeto em desenvolvimento. As principais funcionalidades ainda estão sendo implementadas.
 
 <p align="center">
   <img alt="Página da lista de compras" src=".github/frontend.jpg" width="75%" style="border-radius:32px;">
@@ -7,6 +10,8 @@
 ## Índice
 - [Descrição](#descrição)
 - [Tecnologias](#tecnologias)
+- [Funcionalidades](#funcionalidades)
+- [Roadmap](#roadmap)
 - [Rodando o Projeto](#rodando-o-projeto)
 
 ## Descrição
@@ -18,6 +23,18 @@ A Lista de Compras 2.0 é uma aplicação web para gerenciar uma lista de compra
 - **Banco de Dados:** H2 (em memória)
 - **Front-end:** JavaScript, AngularJS
 - **Gerenciamento de dependências:** Maven, npm
+
+## Funcionalidades
+- [x] Adicionar itens da lista de compras
+
+## Roadmap
+- [ ] Editar e remover itens da lista de compras
+- [ ] Sincronização em tempo real entre front-end e back-end
+- [ ] Banco de dados H2 em memória
+- [ ] Implementar autenticação de usuário
+- [ ] Criar interface para exportar a lista de compras como PDF
+- [ ] Suporte para banco de dados persistente (PostgreSQL, MySQL)
+
 
 
 ## Rodando o projeto
