@@ -1,7 +1,7 @@
 # Lista de Compras 2.0
 
 <p align="center">
-  <img alt="Página da lista de compras" src=".github/frontend.jpg" width="75%" style="border-radius:16px;">
+  <img alt="Página da lista de compras" src=".github/frontend.jpg" width="75%" style="border-radius:32px;">
 </p>
 
 ## Índice
