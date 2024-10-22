@@ -1,28 +1,14 @@
 [
   {
-    "item": "Morango",
-    "quantia": "2",
-    "id": 5,
-    "descricao": "Creme de leite e açucar se lembrar"
+    "item": "Livros SQL",
+    "quantia": "7",
+    "id": 2,
+    "descricao": "SIM"
   },
   {
-    "item": "Chocolate",
-    "quantia": 2,
-    "id": 6
-  },
-  {
-    "item": "Pitaya",
-    "quantia": 3,
-    "id": 1
-  },
-  {
-    "item": "Uva",
-    "quantia": 6,
-    "id": 2
-  },
-  {
-    "item": "Cereal",
-    "quantia": 1,
-    "id": 3
+    "item": "Use a Cabeça Java",
+    "quantia": 1000,
+    "id": 3,
+    "descricao": "LEIA IMEDIANTE AGORA"
   }
 ]

@@ -67,7 +67,15 @@
           <img src="/assets/icons/cancel-02.svg" alt="">
         </button>
       </div>
-      <div class="error-message" ng-show="ErroInclusao">{{ErroInclusao}}</div>
+      <div class="warning" ng-show="ErroInclusao">
+        <div class="text-container">
+          <img src="./assets/icons/warning-circle.svg" alt="">
+          <p>{{ErroInclusao}}</p>
+        </div>
+        <button type="button" ng-click="exclusaoAviso = false">
+          <img src="/assets/icons/cancel-02.svg" alt="">
+        </button>
+      </div>
     </main>
   </div>
 

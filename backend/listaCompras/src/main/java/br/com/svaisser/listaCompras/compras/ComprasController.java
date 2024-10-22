@@ -2,18 +2,18 @@ package br.com.svaisser.listaCompras.compras;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.svaisser.listaCompras.utils.Utils;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.var;
 
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,20 +62,43 @@ public class ComprasController {
 
     }
 
-    @SuppressWarnings({ "rawtypes", "unused" })
     @PutMapping("/{id}")
-    public ResponseEntity update(@RequestBody ComprasModel comprasModel, @PathVariable Integer id,
-            HttpServletRequest request) {
-        var compras = this.comprasRepository.findById(id);
-        System.out.println(compras);
+    public ResponseEntity<ComprasModel> updateCompra(@PathVariable Integer id,
+            @RequestBody ComprasModel compraDetails) {
+        Optional<ComprasModel> compraOptional = comprasRepository.findById(id);
 
-        if (compras == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Compra não encontrada.");
+        if (compraOptional.isPresent()) {
+            ComprasModel compra = compraOptional.get(); // Extraímos o valor do Optional
+
+            // Atualize os campos que você deseja
+            compra.setItem(compraDetails.getItem());
+            compra.setQuantia(compraDetails.getQuantia());
+            compra.setDescricao(compraDetails.getDescricao());
+
+            // Salve a entidade atualizada
+            ComprasModel updatedCompra = comprasRepository.save(compra);
+
+            return ResponseEntity.ok(updatedCompra);
         } else {
-            Utils.copyNonNullProperties(comprasModel, compras);
-            var result = this.comprasRepository.save(compras);
-
-            return ResponseEntity.ok().body("Compra Editada com sucesso! " + result);
+            return ResponseEntity.notFound().build(); // Se o ID não for encontrado
         }
     }
+
+    
+    @DeleteMapping("/delete/{item}")
+    public ResponseEntity<Void> delete(@PathVariable String item) {
+
+        ComprasModel compra = comprasRepository.findByItem(item);
+
+        if (compra != null) {
+            comprasRepository.deleteByItem(item);
+            System.out.println("Item excluído: " + item);
+            return ResponseEntity.ok().build(); // Retorna status 200 OK após exclusão
+        } else {
+            System.out.println("Item não encontrado: " + item);
+            return ResponseEntity.notFound().build(); // Retorna status 404 Not Found
+        }
+
+    }
+
 }
