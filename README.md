@@ -25,10 +25,10 @@ A Lista de Compras 2.0 é uma aplicação web para gerenciar uma lista de compra
 
 ## Funcionalidades
 - [x] Adicionar, editar e remover itens da lista de compras
+- [X] Banco de dados H2 em memória
 
 ## Roadmap
 - [ ] Sincronização em tempo real entre front-end e back-end
-- [ ] Banco de dados H2 em memória
 - [ ] Implementar autenticação de usuário
 - [ ] Criar interface para exportar a lista de compras como PDF
 - [ ] Suporte para banco de dados persistente (PostgreSQL, MySQL)
