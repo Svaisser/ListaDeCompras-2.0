@@ -10,5 +10,11 @@
     "quantia": 1000,
     "id": 3,
     "descricao": "LEIA IMEDIANTE AGORA"
+  },
+  {
+    "item": "DrJava",
+    "quantia": 2,
+    "id": 1,
+    "descricao": "COmpre imediante"
   }
 ]
