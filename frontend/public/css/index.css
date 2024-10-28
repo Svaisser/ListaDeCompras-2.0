@@ -154,30 +154,23 @@ div[role="listbox"] img {
 
 .warning {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: absolute;
+    top: 19%;
+    left: 28%;
     width: 100%;
-    max-width: 600px;
-    padding: 12px;
+    max-width: 620px;
+    padding: 16px;
     border-radius: 12px;
-    background-color: #C93847;
+    background-color: rgba(201, 56, 71);
     color: white;
-    margin-top: 16px;
 }
 
 .warning .text-container {
     display: flex;
-    align-items: center;
 }
 
 .warning .text-container img {
     margin-right: 8px;
-}
-
-.warning button {
-    background: none;
-    border: none;
-    cursor: pointer;
 }
 
 /* Modal */

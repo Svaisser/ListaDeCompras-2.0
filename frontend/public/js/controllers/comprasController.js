@@ -1,4 +1,4 @@
-angular.module('meuApp').controller('MeuController', function ($scope, $http) {
+angular.module('meuApp').controller('listaCompras', function ($scope, $http) {
 
   $scope.listaCompras = [];
   $scope.compraEditando = {};
@@ -6,7 +6,7 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
 
   $scope.carregarCompras = function () {
     return $http({
-      url: 'compras.json',
+      url: '../compras.json',
       method: 'GET'
     }).then(function (response) {
       $scope.listaCompras = response.data;
@@ -163,7 +163,7 @@ angular.module('meuApp').controller('MeuController', function ($scope, $http) {
         $scope.$apply(function () {
           $scope.exclusaoAviso = false;
         });
-      }, 3000);
+      }, 5000);
 
     }).catch(function (error) {
       $scope.ErroExclusao = error.data || 'Erro ao excluir a compra.';
