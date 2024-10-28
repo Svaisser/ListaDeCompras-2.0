@@ -23,8 +23,7 @@ body {
 }
 
 header {
-    margin-top: 25px;
-    margin-bottom: 62px;
+    margin-block: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
