@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" ng-app="meuApp">
 
 <head>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,15 +11,19 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
     rel="stylesheet">
-
   <link rel="stylesheet" href="../css/login.css">
   <link rel="shortcut icon" href="../assets/icons/Vector.svg" type="image/x-icon">
 
   <title>Lista de Compras</title>
+
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/controllers/comprasController.js"></script>
+  <script src="../js/controllers/userController.js"></script>
+
 </head>
 
-<body>
+<body ng-controller="userController">
   <header>
     <a>
       <img src="../assets/icons/logo.svg" alt="logo">
@@ -32,9 +36,11 @@
         <h1>Login</h1>
       </div>
       <div class="input-wrapper">
-        
-        <input type="text" placeholder="Username" id="username" ng-model="frmLogin.username" ng-keypress="enterLogin($event)">
-        <input type="password" placeholder="Senha" id="password" ng-model="frmLogin.password" ng-keypress="enterLogin($event)">
+
+        <input type="text" placeholder="Username" id="username" ng-model="frmLogin.username"
+          ng-keypress="enterLogin($event)">
+        <input type="password" placeholder="Senha" id="password" ng-model="frmLogin.password"
+          ng-keypress="enterLogin($event)">
         <button type="button" ng-click="loginUser()">Entrar</button>
       </div>
       <div class="text">
@@ -42,6 +48,19 @@
       </div>
 
     </form>
+
+    <div class="sucesso" ng-show="SucessoLogin">
+      <div class="text-container">
+        <img src="../assets/icons/warning-circle.svg" alt="">
+        <p>{{SucessoLogin}}</p>
+      </div>
+    </div>
+    <div class="warning" ng-show="ErroLogin">
+      <div class="text-container">
+        <img src="../assets/icons/warning-circle.svg" alt="">
+        <p>{{ErroLogin}}</p>
+      </div>
+    </div>
   </main>
 
 </body>

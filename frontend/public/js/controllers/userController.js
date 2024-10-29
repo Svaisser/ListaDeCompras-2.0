@@ -79,6 +79,7 @@ angular.module('meuApp').controller('userController', function ($scope, $http) {
 
   // ÁREA DO LOGIN
 
+  $scope.SucessoLogin = '';
   $scope.ErroLogin = '';
   $scope.frmLogin = {
     "username": "",
@@ -99,27 +100,33 @@ angular.module('meuApp').controller('userController', function ($scope, $http) {
       return;
     }
 
-    $http.post('http://localhost:8080/login', $scope.frmLogin).then(function (response) {
-      console.log(response.data);
-      alert('Login efetuado com sucesso!');
+    $http.post('http://localhost:8080/users/login', $scope.frmLogin).then(function (response) {
+      const message = response.data.message || response.data;
+      console.log(message);
+      $scope.SucessoLogin = 'Login efetuado com sucesso!';
+      setTimeout(function () {
+        $scope.$apply(function () {
+          $scope.SucessoLogin = false;
+        });
+      }, 5000);
       $scope.frmLogin = {
         "username": "",
         "password": ""
       };
     }).catch(function (error) {
       console.error('Erro:', error);
-
+    
       const errorMessage = error.data && error.data.message
         ? error.data.message
         : 'Erro ao fazer o login.';
-
+    
       $scope.ErroLogin = errorMessage;
       setTimeout(function () {
         $scope.$apply(function () {
           $scope.ErroLogin = false;
         });
       }, 5000);
-    })
+    });
   }
 
   $scope.enterLogin = function (event) {

@@ -1,5 +1,8 @@
 package br.com.svaisser.listaCompras.users;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -41,21 +44,23 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserModel loginRequest) {
-        // Buscar o usuário pelo username
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserModel loginRequest) {
+        Map<String, String> response = new HashMap<>();
         UserModel user = userRepository.findByUsername(loginRequest.getUsername());
 
-        // Verificar se o usuário existe e se a senha está correta
         if (user != null) {
             BCrypt.Result result = BCrypt.verifyer().verify(loginRequest.getPassword().toCharArray(),
                     user.getPassword());
             if (result.verified) {
-                return ResponseEntity.ok("Login bem-sucedido!");
+                response.put("message", "Login bem-sucedido!");
+                return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta.");
+                response.put("message", "Senha incorreta.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+            response.put("message", "Usuário não encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }
