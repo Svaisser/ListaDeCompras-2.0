@@ -1,20 +1,14 @@
 [
   {
-    "item": "Livros SQL",
-    "quantia": "7",
-    "id": 2,
-    "descricao": "SIM"
-  },
-  {
     "item": "Use a Cabeça Java",
     "quantia": "8",
     "id": 3,
     "descricao": "Péssimo Livro Frank"
   },
   {
-    "item": "DrJava",
-    "quantia": 2,
+    "item": "Funcionou",
+    "quantia": 38,
     "id": 1,
-    "descricao": "COmpre imediante"
+    "descricao": "Chupa Brasil"
   }
 ]

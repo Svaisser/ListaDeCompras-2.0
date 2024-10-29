@@ -1,4 +1,4 @@
-angular.module('meuApp').controller('userController', function ($scope, $http) {
+angular.module('meuApp').controller('userController', function ($scope, $http, $window) {
 
   // AŔEA DO CADASTRO
 
@@ -113,6 +113,7 @@ angular.module('meuApp').controller('userController', function ($scope, $http) {
         "username": "",
         "password": ""
       };
+      $window.location.href = "lista.html";
     }).catch(function (error) {
       console.error('Erro:', error);
     
