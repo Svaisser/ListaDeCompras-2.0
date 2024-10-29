@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,18 +27,18 @@
   </header>
 
   <main>
-    <form action="" method="post" enctype="multipart/form-data">
+    <form>
       <div class="text">
         <h1>Login</h1>
       </div>
       <div class="input-wrapper">
         
-        <input type="text" placeholder="Username" id="username">
-        <input type="password" placeholder="Senha" id="password">
-        <button type="button">Entrar</button>
+        <input type="text" placeholder="Username" id="username" ng-model="frmLogin.username" ng-keypress="enterLogin($event)">
+        <input type="password" placeholder="Senha" id="password" ng-model="frmLogin.password" ng-keypress="enterLogin($event)">
+        <button type="button" ng-click="loginUser()">Entrar</button>
       </div>
       <div class="text">
-        <p><a href="cadastro.html" target="_blank">Não tem uma conta? Crie</a></p>
+        <p><a href="cadastro.html">Não tem uma conta? Crie</a></p>
       </div>
 
     </form>

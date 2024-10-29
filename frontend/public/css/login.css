@@ -98,3 +98,35 @@ form {
 .text a:hover {
     color: var(--content-secondary-hover);
 }
+
+.warning {
+    display: flex;
+    position: absolute;
+    top: 75%;
+    width: 100%;
+    max-width: 420px;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: rgba(201, 56, 71);
+    color: white;
+}
+
+.sucesso {
+    display: flex;
+    position: absolute;
+    top: 75%;
+    width: 100%;
+    max-width: 420px;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: rgba(22, 177, 68, 0.7);
+    color: white;
+}
+
+.warning .text-container , .sucesso .text-container {
+    display: flex;
+}
+
+.warning .text-container img , .sucesso .text-container img {
+    margin-right: 8px;
+}

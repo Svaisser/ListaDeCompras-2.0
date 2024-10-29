@@ -31,17 +31,16 @@
   </header>
 
   <main>
-    <form action="" method="post" enctype="multipart/form-data">
+    <form>
       <div class="text">
         <h1>Crie sua conta</h1>
       </div>
 
       <div class="input-wrapper">
 
-        <input type="text" placeholder="Nome completo" id="name" ng-model="frmUser.name">
-        <input type="text" placeholder="Username" id="username" ng-model="frmUser.username">
-        <input type="password" placeholder="Senha" id="password"
-        ng-model="frmUser.password">
+        <input type="text" placeholder="Nome completo" id="name" ng-model="cadastroUser.name" ng-keypress="enterCadastro($event)">
+        <input type="text" placeholder="Username" id="username" ng-model="cadastroUser.username" ng-keypress="enterCadastro($event)">
+        <input type="password" placeholder="Senha" id="password" ng-model="cadastroUser.password" ng-keypress="enterCadastro($event)">
         <button type="button" ng-click="createUser()">Cadastrar</button>
       </div>
 
@@ -50,6 +49,21 @@
       </div>
 
     </form>
+
+    
+    <div class="sucesso" ng-show="SucessoCadastro">
+      <div class="text-container">
+        <img src="../assets/icons/warning-circle.svg" alt="">
+        <p>{{SucessoCadastro}}</p>
+      </div>
+    </div>
+    <div class="warning" ng-show="ErroCadastro">
+      <div class="text-container">
+        <img src="../assets/icons/warning-circle.svg" alt="">
+        <p>{{ErroCadastro}}</p>
+      </div>
+    </div>
+    
   </main>
 
 </body>
