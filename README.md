@@ -4,10 +4,6 @@
 
 🚧 Projeto em desenvolvimento. As principais funcionalidades ainda estão sendo implementadas.
 
-<p align="center">
-  <img alt="Página da lista de compras" src=".github/frontend.jpg" width="75%" style="border-radius:2em;">
-</p> <hr>
-
 ## Índice
 
 - [Descrição](#descrição)
@@ -49,17 +45,15 @@ A Lista de Compras 2.0 é uma aplicação web para gerenciar uma lista de compra
    sudo systemctl start postgresql 
    # Para verificar o serviço
    sudo systemctl status postgresql
+2. **Execute o arquivo**:
+    
+    [ListaComprasApplication.java](backend/listaCompras/src/main/java/br/com/svaisser/listaCompras/ListaComprasApplication.java)
 
-Siga o caminho abaixo e execute a aplicação. <br>
-backend/listaCompras/src/main/java/br/com/svaisser/listaCompras/ListaComprasApplication.java
-
-### Front-end
-
-cd frontend<br>
-npm install<br>
-npm start<br>
-
-
+3. **Rodando o Front**:
+   ```bash
+   cd frontend
+   npm install
+   npm start
 ### Observações Finais
 
 O projeto foi desenvolvido para funcionar com PostgreSQL. Certifique-se de que o PostgreSQL está em execução sempre que for iniciar a aplicação. Além de que no seu postgres é necessário configurar a senha padrão. O padrão do projeto é senha: admin, caso precise alterar -> [application.properties](backend/listaCompras/src/main/resources/application.properties)
