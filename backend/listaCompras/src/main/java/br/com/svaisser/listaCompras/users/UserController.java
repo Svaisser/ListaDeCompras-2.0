@@ -3,20 +3,26 @@ package br.com.svaisser.listaCompras.users;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.svaisser.listaCompras.config.ErrorResponse;
+import br.com.svaisser.listaCompras.config.JwtUtil;
+
+@CrossOrigin(origins = "http://localhost:3000")
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
+    @Autowired
+    private JwtUtil jwtUtil;
     @Autowired
     private IUserRepository userRepository;
 
@@ -52,7 +58,11 @@ public class UserController {
             BCrypt.Result result = BCrypt.verifyer().verify(loginRequest.getPassword().toCharArray(),
                     user.getPassword());
             if (result.verified) {
+                // Gerar o token JWT
+                String token = jwtUtil.generateToken(user.getId());
                 response.put("message", "Login bem-sucedido!");
+                response.put("token", token); // Enviar o token ao cliente
+                response.put("idUser", String.valueOf(user.getId())); // Converte o ID para String
                 return ResponseEntity.ok(response);
             } else {
                 response.put("message", "Senha incorreta.");
@@ -63,4 +73,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
 }

@@ -8,7 +8,7 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
   $scope.cadastroUser = {
     "name": "",
     "username": "",
-    "password": ""
+    "password": "",
   }
 
   $scope.createUser = function () {
@@ -78,16 +78,14 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
   };
 
   // ÁREA DO LOGIN
-
   $scope.SucessoLogin = '';
   $scope.ErroLogin = '';
   $scope.frmLogin = {
     "username": "",
     "password": ""
-  }
+  };
 
   $scope.loginUser = function () {
-
     $scope.ErroLogin = '';
 
     if (!$scope.frmLogin.username || !$scope.frmLogin.password) {
@@ -100,9 +98,17 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
       return;
     }
 
+    // Faz a requisição de login e armazena o token JWT
     $http.post('http://localhost:8080/users/login', $scope.frmLogin).then(function (response) {
       const message = response.data.message || response.data;
       console.log(message);
+
+      // Armazena o token JWT no localStorage
+      const token = response.data.token;
+      const idUser = response.data.idUser;
+      localStorage.setItem("token", token);
+      localStorage.setItem("idUser", idUser);
+
       $scope.SucessoLogin = 'Login efetuado com sucesso!';
       setTimeout(function () {
         $scope.$apply(function () {
@@ -113,14 +119,14 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
         "username": "",
         "password": ""
       };
-      $window.location.href = "lista.html";
+      $window.location.href = "lista.html"; // Redireciona após o login
     }).catch(function (error) {
       console.error('Erro:', error);
-    
+
       const errorMessage = error.data && error.data.message
         ? error.data.message
         : 'Erro ao fazer o login.';
-    
+
       $scope.ErroLogin = errorMessage;
       setTimeout(function () {
         $scope.$apply(function () {
@@ -128,7 +134,7 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
         });
       }, 5000);
     });
-  }
+  };
 
   $scope.enterLogin = function (event) {
     if (event.which === 13) {  // 13 é o código da tecla Enter

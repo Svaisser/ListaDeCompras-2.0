@@ -1,46 +1,33 @@
-angular.module('meuApp').controller('listaCompras', function ($scope, $http) {
+angular.module('meuApp').controller('listaCompras', function ($scope, $http, $window) {
 
   $scope.listaCompras = [];
   $scope.compraEditando = {};
   $scope.ErroInclusao = '';
 
-  $scope.carregarCompras = function () {
-    return $http({
-      url: '../compras.json',
-      method: 'GET'
-    }).then(function (response) {
-      $scope.listaCompras = response.data;
-    })
-  }
+  const token = localStorage.getItem('token');
+  const idUser = localStorage.getItem('idUser');
+  console.log('ID do usuário: ', idUser);
+  console.log('Token JWT: ', token);
 
-  $scope.enviarCompras = function () {
-    const url = 'http://localhost:8080/compras/';
-    const data = $scope.listaCompras;
-
-    return $http.post(url, data)
-      .then(function (response) {
-        console.log('Sucesso:', response.data);
-      })
-      .catch(function (error) {
-        console.error('Erro:', error);
-      });
-  };
-
-  $scope.carregarCompras().then($scope.enviarCompras);
-
-  function getNextId() {
-    if ($scope.listaCompras.length === 0) {
-      return 1;
-    } else {
-      var ids = $scope.listaCompras.map(function (c) { return c.id; }).sort(function (a, b) { return a - b; });
-
-      for (var i = 0; i < ids.length; i++) {
-        if (ids[i] !== i + 1) {
-          return i + 1;
-        }
+  if (token) {
+    axios.get(`http://localhost:8080/compras/${idUser}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
-      return ids[ids.length - 1] + 1;
-    }
+    })
+      .then(response => {
+        $scope.$apply();
+        return $scope.listaCompras = response.data;
+      })
+      .catch(error => {
+        console.error('Erro com Axios ao buscar compras:', error);
+        if (error.response && error.response.status === 403) {
+          alert('Acesso negado. Verifique seu login.');
+        }
+      });
+  } else {
+    alert('Precisa estar logado para acessar sua lista.');
+    $window.location.href = 'http://localhost:3000/view/login.html';
   }
 
   $scope.adicionarCompra = function () {
@@ -48,7 +35,6 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http) {
     $scope.bd_compra = [];
     var item = $scope.frmCompras.item;
     var quantia = $scope.frmCompras.quantia;
-    var id = getNextId();
     var compraIndex = $scope.listaCompras.findIndex(c => c.item === item);
 
     if (compraIndex > -1) {
@@ -79,36 +65,10 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http) {
       return;
     }
 
-    $scope.listaCompras.push({
-      "item": item,
-      "quantia": quantia,
-      "id": id
-    });
-
     $scope.bd_compra.push({
       "item": item,
       "quantia": quantia,
-      "id": id
-    });
-
-    // Envia os dados para o servidor
-    $http({
-      url: '/addCompras',
-      method: 'POST',
-      data: {
-        "item": item,
-        "quantia": quantia,
-        "id": id
-      }
-    }).then(function (response) {
-      console.log(response.data);
-    }).catch(function (error) {
-      $scope.ErroInclusao = 'Erro ao adicionar a compra: ' + error.message;
-      setTimeout(function () {
-        $scope.$apply(function () {
-          $scope.ErroInclusao = false;
-        });
-      }, 3000);
+      "idUser": idUser
     });
 
     $scope.frmCompras = {
@@ -116,11 +76,8 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http) {
       "quantia": ""
     };
 
-    //Posta no back end.
-    const url = 'http://localhost:8080/compras/';
-
     $http({
-      url: url,
+      url: 'http://localhost:8080/compras/create',
       method: 'POST',
       data: $scope.bd_compra
     }).then(function (response) {
@@ -128,30 +85,43 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http) {
     }).catch(function (error) {
       console.error('Erro:', error);
     });
+
+    axios.get(`http://localhost:8080/compras/${idUser}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        $scope.$apply();
+        $scope.listaCompras = response.data;
+      })
   };
 
   $scope.mostrarModalConfirmacao = false;
   $scope.itemParaExcluir = null;
 
-  $scope.excluirCompra = function (item) {
-    $scope.itemParaExcluir = item;
+  $scope.excluirCompra = function (id) {
+    $scope.itemParaExcluir = id;
+    console.log('Excluir' + id);
     $scope.mostrarModalConfirmacao = true;
   };
 
   $scope.confirmarExclusao = function () {
-    $http({
-      url: '/deleteCompra',
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      data: { item: $scope.itemParaExcluir }
-    }).then(function (response) {
       const url = 'http://localhost:8080/compras/delete/' + $scope.itemParaExcluir;
       $http({
         url: url,
         method: 'DELETE',
         data: { item: $scope.itemParaExcluir }
       })
-      $scope.carregarCompras();
+      axios.get(`http://localhost:8080/compras/${idUser}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(response => {
+          $scope.$apply();
+          $scope.listaCompras = response.data;
+        })
 
       $scope.exclusaoAviso = true;
 
@@ -165,88 +135,74 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http) {
         });
       }, 5000);
 
-    }).catch(function (error) {
+    (function (error) {
       $scope.ErroExclusao = error.data || 'Erro ao excluir a compra.';
       alert($scope.ErroExclusao);
     });
   };
 
-  $scope.cancelarExclusao = function () {
-    $scope.mostrarModalConfirmacao = false;
-    $scope.itemParaExcluir = null;
-  };
+$scope.cancelarExclusao = function () {
+  $scope.mostrarModalConfirmacao = false;
+  $scope.itemParaExcluir = null;
+};
 
+$scope.mostrarDetalhes = false;
+
+$scope.abrirDetalhes = function (compra) {
+  $scope.compraDetalhes = angular.copy(compra);
+  $scope.mostrarDetalhes = true;
+};
+
+$scope.fecharDetalhes = function () {
   $scope.mostrarDetalhes = false;
+};
 
-  $scope.abrirDetalhes = function (compra) {
-    $scope.compraDetalhes = angular.copy(compra);
-    $scope.mostrarDetalhes = true;
-  };
+$scope.editarDetalhes = function (compraDetalhes) {
+  var id = compraDetalhes.id;
+  var item = compraDetalhes.item;
+  var quantia = compraDetalhes.quantia;
+  var descricao = compraDetalhes.descricao;
 
-  $scope.fecharDetalhes = function () {
-    $scope.mostrarDetalhes = false;
-  };
+  if (quantia < 1) {
+    $scope.ErroInclusao = 'A quantidade precisa ser no mínimo 1.';
+    return;
+  }
 
-  $scope.editarDetalhes = function (compraDetalhes) {
-    var id = compraDetalhes.id;
-    var item = compraDetalhes.item;
-    var quantia = compraDetalhes.quantia;
-    var descricao = compraDetalhes.descricao;
+  if (!item || !quantia) {
+    $scope.ErroInclusao = 'Por favor, preencha todos os campos obrigatórios.';
+    return;
+  }
 
-    if (quantia < 1) {
-      $scope.ErroInclusao = 'A quantidade precisa ser no mínimo 1.';
-      return;
-    }
+  var compraIndex = $scope.listaCompras.findIndex(c => c.id === id);
+  if (compraIndex > -1) {
+    $scope.listaCompras[compraIndex] = {
+      id: id,
+      item: item,
+      quantia: quantia,
+      descricao: descricao
+    };
+  }
 
-    if (!item || !quantia) {
-      $scope.ErroInclusao = 'Por favor, preencha todos os campos obrigatórios.';
-      return;
-    }
+  //Edita o item no back.
+  const url = 'http://localhost:8080/compras/update/' + id;
+  $http({
+    url: url,
+    method: 'PUT',
+    data: compraDetalhes
+  }).then(function (response) {
+    console.log('Sucesso:', response.data);
+  }).catch(function (error) {
+    console.error('Erro:', error);
+  });
 
-    var compraIndex = $scope.listaCompras.findIndex(c => c.id === id);
-    if (compraIndex > -1) {
-      $scope.listaCompras[compraIndex] = {
-        id: id,
-        item: item,
-        quantia: quantia,
-        descricao: descricao
-      };
-    }
+  $scope.fecharDetalhes();
+};
 
-    $http({
-      url: '/updateCompra/' + id,
-      method: 'PUT',
-      data: {
-        item: item,
-        quantia: quantia,
-        descricao: descricao
-      }
-    }).then(function (response) {
-      console.log('Compra atualizada com sucesso:', response.data); // Mensagem de sucesso
-    }).catch(function (error) {
-      $scope.ErroInclusao = 'Erro ao atualizar a compra: ' + error.message;
-    });
-
-    //Edita o item no back.
-    const url = 'http://localhost:8080/compras/' + id;
-    $http({
-      url: url,
-      method: 'PUT',
-      data: compraDetalhes
-    }).then(function (response) {
-      console.log('Sucesso:', response.data);
-    }).catch(function (error) {
-      console.error('Erro:', error);
-    });
-
-    $scope.fecharDetalhes();
-  };
-
-  $scope.ajustarAltura = function (event) {
-    const element = event.target;
-    element.style.height = 'auto';
-    element.style.height = (element.styleHeight) + 10;
-    element.style.height = (element.scrollHeight) + 'px';
-  };
+$scope.ajustarAltura = function (event) {
+  const element = event.target;
+  element.style.height = 'auto';
+  element.style.height = (element.styleHeight) + 10;
+  element.style.height = (element.scrollHeight) + 'px';
+};
 
 });

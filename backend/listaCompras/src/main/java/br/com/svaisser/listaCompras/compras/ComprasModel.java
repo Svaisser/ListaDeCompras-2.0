@@ -1,11 +1,8 @@
 package br.com.svaisser.listaCompras.compras;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -17,15 +14,17 @@ import lombok.Data;
 public class ComprasModel {
 
     @Id
-    private int id;
-    private int idUser;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private Integer idUser;
 
-    @Column(unique = true)
     private String item;
     private Double quantia;
     private String descricao;
-    
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    public boolean isEmpty() {
+        return (id == null || id <= 0) && (idUser == null || idUser <= 0)
+                && (item == null || item.isEmpty())
+                && (quantia == null || quantia <= 0);
+    }
 }

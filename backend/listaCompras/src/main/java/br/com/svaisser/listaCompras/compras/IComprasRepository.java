@@ -8,7 +8,8 @@ public interface IComprasRepository extends JpaRepository<ComprasModel, Integer>
 
   ComprasModel findByItem(String item);
 
-  List<ComprasModel> findByIdUser(int idUser);
+  List<ComprasModel> findByIdUser(Integer idUser);
+
   // ComprasModel findByIdAndByIdUser(Integer id, Integer idUser);
 
   @Transactional
