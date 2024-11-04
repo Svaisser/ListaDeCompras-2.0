@@ -105,6 +105,7 @@ public class ComprasController {
     }
   }
 
+  @SuppressWarnings("unused")
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<?> delete(HttpServletRequest request, @PathVariable Integer id) {
 

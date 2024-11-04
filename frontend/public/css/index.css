@@ -39,9 +39,16 @@ header {
     margin: auto;
 }
 
-.container a {
+.container button {
     text-decoration: none;
     color: var(--color-brand);
+    border: none;
+    font-size: 16px;
+    background-color: var(--background-primary);
+    &:hover {
+        cursor: pointer;
+        color: var(--color-brand-hover);
+    }
 }
 
 h1 {

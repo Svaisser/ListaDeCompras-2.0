@@ -34,7 +34,7 @@
 
   <div id="app">
     <div class="container">
-      <a href="./login.html">&lt;- Voltar</a>
+      <button ng-click="logoutUser()" >&lt;- Deslogar</button>
     </div>
     <main>
       <form action="" method="post" enctype="multipart/form-data">
@@ -54,7 +54,7 @@
             <button type="button" class="pencil" ng-click="abrirDetalhes(compra)">
               <img src="../assets/icons/modify-icon.svg" alt="Caneta para edição">
             </button>
-            <button type="button" ng-click="excluirCompra(compra.item)">
+            <button type="button" ng-click="excluirCompra(compra.id)">
               <img src="../assets/icons/delete-02-stroke-rounded.svg" alt="lixeira para exclusão">
             </button>
           </div>

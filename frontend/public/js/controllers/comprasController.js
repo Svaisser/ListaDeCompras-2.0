@@ -21,14 +21,22 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       })
       .catch(error => {
         console.error('Erro com Axios ao buscar compras:', error);
-        if (error.response && error.response.status === 403) {
-          alert('Acesso negado. Verifique seu login.');
+        if (error.response) {
+          const errorMessage = error.response.data || 'Acesso negado. Verifique seu login.';
+          alert(errorMessage);
         }
       });
   } else {
     alert('Precisa estar logado para acessar sua lista.');
     $window.location.href = 'http://localhost:3000/view/login.html';
   }
+
+  $scope.logoutUser = function logoutUser() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('idUser');
+    window.location.href = 'http://localhost:3000/view/login.html';
+  }
+  
 
   $scope.adicionarCompra = function () {
     $scope.ErroInclusao = '';

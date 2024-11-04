@@ -34,7 +34,6 @@ public class JwtFilter extends OncePerRequestFilter {
     String token = request.getHeader("Authorization");
     String path = request.getRequestURI();
 
-    // Permitir acesso a rotas públicas sem validação de token
     if (PUBLIC_ROUTES.contains(path)) {
       filterChain.doFilter(request, response);
       return;
@@ -45,33 +44,39 @@ public class JwtFilter extends OncePerRequestFilter {
       try {
         if (token != null && token.startsWith("Bearer ")) {
           token = token.substring(7);
-          Integer idUser = jwtUtil.extractIdUser(token); // Supondo que você tenha um método para extrair o ID do
-                                                         // usuário
+          Integer idUser = jwtUtil.extractIdUser(token);
 
           if (!jwtUtil.validateToken(token, idUser)) {
             throw new JwtException("Token inválido");
           }
 
-          // Definindo a autenticação no contexto de segurança
           UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(idUser, null,
               List.of());
           SecurityContextHolder.getContext().setAuthentication(authentication);
 
-          request.setAttribute("idUser", idUser); // Adicionando o ID do usuário na requisição
+          request.setAttribute("idUser", idUser);
         } else {
-          response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token JWT ausente ou inválido");
+          response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+          response.getWriter().write("Token JWT ausente ou inválido. Verifique o Login");
+          response.getWriter().flush();
           return;
         }
       } catch (ExpiredJwtException e) {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expirado");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Token expirado. Logue novamente");
+        response.getWriter().flush();
+        System.out.println("Token expirado");
         return;
       } catch (JwtException e) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token inválido");
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.getWriter().write("Token inválido. Verifique o Login");
+        response.getWriter().flush();
+        System.out.println("Token inválido");
         return;
       }
     }
 
-    filterChain.doFilter(request, response); // Continua com a cadeia de filtros
+    filterChain.doFilter(request, response);
   }
 
 }
