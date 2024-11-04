@@ -89,6 +89,7 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       data: $scope.bd_compra
     }).then(function (response) {
       console.log('Sucesso:', response.data);
+
       return $http.get(`http://localhost:8080/compras/${idUser}`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -118,10 +119,10 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       url: url,
       method: 'DELETE'
     }).then(function (response) {
-      // Exclusão bem-sucedida, agora recarrega a lista de compras
+
       console.log('Item excluído com sucesso:', response.data);
 
-      // Recarrega a lista de compras após exclusão
+
       $http.get(`http://localhost:8080/compras/${idUser}`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -140,7 +141,6 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       alert('Erro ao excluir o item. Tente novamente.');
     });
 
-    // Fechar o modal de confirmação
     $scope.mostrarModalConfirmacao = false;
     $scope.itemParaExcluir = null;
   };
