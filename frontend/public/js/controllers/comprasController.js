@@ -10,14 +10,13 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
   console.log('Token JWT: ', token);
 
   if (token) {
-    axios.get(`http://localhost:8080/compras/${idUser}`, {
+    $http.get(`http://localhost:8080/compras/${idUser}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
-      .then(response => {
-        $scope.$apply();
-        return $scope.listaCompras = response.data;
+      .then(function (response) {
+        $scope.listaCompras = response.data;
       })
       .catch(error => {
         console.error('Erro com Axios ao buscar compras:', error);
@@ -31,12 +30,12 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
     $window.location.href = 'http://localhost:3000/view/login.html';
   }
 
-  $scope.logoutUser = function logoutUser() {
+  $scope.logoutUser = function () {
     localStorage.removeItem('token');
     localStorage.removeItem('idUser');
     window.location.href = 'http://localhost:3000/view/login.html';
   }
-  
+
 
   $scope.adicionarCompra = function () {
     $scope.ErroInclusao = '';
@@ -63,7 +62,7 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       }, 3000);
       return;
     }
-    if (!item || !quantia) {
+    if (item == "" || quantia == "") {
       $scope.ErroInclusao = 'Por favor, preencha todos os campos obrigatórios.';
       setTimeout(function () {
         $scope.$apply(function () {
@@ -90,19 +89,17 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       data: $scope.bd_compra
     }).then(function (response) {
       console.log('Sucesso:', response.data);
+      return $http.get(`http://localhost:8080/compras/${idUser}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(function (response) {
+          return $scope.listaCompras = response.data;
+        })
     }).catch(function (error) {
       console.error('Erro:', error);
-    });
-
-    axios.get(`http://localhost:8080/compras/${idUser}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        $scope.$apply();
-        $scope.listaCompras = response.data;
-      })
+    }, 3000);
   };
 
   $scope.mostrarModalConfirmacao = false;
@@ -110,107 +107,116 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
 
   $scope.excluirCompra = function (id) {
     $scope.itemParaExcluir = id;
-    console.log('Excluir' + id);
+    console.log('Excluir ' + id);
     $scope.mostrarModalConfirmacao = true;
   };
 
   $scope.confirmarExclusao = function () {
-      const url = 'http://localhost:8080/compras/delete/' + $scope.itemParaExcluir;
-      $http({
-        url: url,
-        method: 'DELETE',
-        data: { item: $scope.itemParaExcluir }
-      })
-      axios.get(`http://localhost:8080/compras/${idUser}`, {
+    const url = 'http://localhost:8080/compras/delete/' + $scope.itemParaExcluir;
+
+    $http({
+      url: url,
+      method: 'DELETE'
+    }).then(function (response) {
+      // Exclusão bem-sucedida, agora recarrega a lista de compras
+      console.log('Item excluído com sucesso:', response.data);
+
+      // Recarrega a lista de compras após exclusão
+      $http.get(`http://localhost:8080/compras/${idUser}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-        .then(response => {
-          $scope.$apply();
+        .then(function (response) {
           $scope.listaCompras = response.data;
+          console.log('Lista de compras atualizada:', $scope.listaCompras);
         })
-
-      $scope.exclusaoAviso = true;
-
-      $scope.mostrarModalConfirmacao = false;
-      $scope.itemParaExcluir = null;
-
-      // Após 3 segundos, ocultar a div novamente
-      setTimeout(function () {
-        $scope.$apply(function () {
-          $scope.exclusaoAviso = false;
+        .catch(function (error) {
+          console.error('Erro ao recarregar a lista de compras:', error);
         });
-      }, 5000);
 
-    (function (error) {
-      $scope.ErroExclusao = error.data || 'Erro ao excluir a compra.';
-      alert($scope.ErroExclusao);
+    }).catch(function (error) {
+      console.error('Erro ao excluir o item:', error);
+      alert('Erro ao excluir o item. Tente novamente.');
     });
+
+    // Fechar o modal de confirmação
+    $scope.mostrarModalConfirmacao = false;
+    $scope.itemParaExcluir = null;
   };
 
-$scope.cancelarExclusao = function () {
-  $scope.mostrarModalConfirmacao = false;
-  $scope.itemParaExcluir = null;
-};
 
-$scope.mostrarDetalhes = false;
 
-$scope.abrirDetalhes = function (compra) {
-  $scope.compraDetalhes = angular.copy(compra);
-  $scope.mostrarDetalhes = true;
-};
+  $scope.cancelarExclusao = function () {
+    $scope.mostrarModalConfirmacao = false;
+    $scope.itemParaExcluir = null;
+  };
 
-$scope.fecharDetalhes = function () {
   $scope.mostrarDetalhes = false;
-};
 
-$scope.editarDetalhes = function (compraDetalhes) {
-  var id = compraDetalhes.id;
-  var item = compraDetalhes.item;
-  var quantia = compraDetalhes.quantia;
-  var descricao = compraDetalhes.descricao;
+  $scope.abrirDetalhes = function (compra) {
+    $scope.compraDetalhes = angular.copy(compra);
+    $scope.mostrarDetalhes = true;
+  };
 
-  if (quantia < 1) {
-    $scope.ErroInclusao = 'A quantidade precisa ser no mínimo 1.';
-    return;
-  }
+  $scope.fecharDetalhes = function () {
+    $scope.mostrarDetalhes = false;
+  };
 
-  if (!item || !quantia) {
-    $scope.ErroInclusao = 'Por favor, preencha todos os campos obrigatórios.';
-    return;
-  }
+  $scope.editarDetalhes = function (compraDetalhes) {
+    var id = compraDetalhes.id;
+    var item = compraDetalhes.item;
+    var quantia = compraDetalhes.quantia;
+    var descricao = compraDetalhes.descricao;
 
-  var compraIndex = $scope.listaCompras.findIndex(c => c.id === id);
-  if (compraIndex > -1) {
-    $scope.listaCompras[compraIndex] = {
-      id: id,
-      item: item,
-      quantia: quantia,
-      descricao: descricao
-    };
-  }
+    if (quantia < 1) {
+      $scope.ErroInclusao = 'A quantidade precisa ser no mínimo 1.';
+      return;
+    }
 
-  //Edita o item no back.
-  const url = 'http://localhost:8080/compras/update/' + id;
-  $http({
-    url: url,
-    method: 'PUT',
-    data: compraDetalhes
-  }).then(function (response) {
-    console.log('Sucesso:', response.data);
-  }).catch(function (error) {
-    console.error('Erro:', error);
-  });
+    if (!item || !quantia) {
+      $scope.ErroInclusao = 'Por favor, preencha todos os campos obrigatórios.';
+      return;
+    }
 
-  $scope.fecharDetalhes();
-};
+    var compraIndex = $scope.listaCompras.findIndex(c => c.id === id);
+    if (compraIndex > -1) {
+      $scope.listaCompras[compraIndex] = {
+        id: id,
+        item: item,
+        quantia: quantia,
+        descricao: descricao
+      };
+    }
 
-$scope.ajustarAltura = function (event) {
-  const element = event.target;
-  element.style.height = 'auto';
-  element.style.height = (element.styleHeight) + 10;
-  element.style.height = (element.scrollHeight) + 'px';
-};
+    //Edita o item no back.
+    const url = 'http://localhost:8080/compras/update/' + id;
+    $http({
+      url: url,
+      method: 'PUT',
+      data: compraDetalhes
+    }).then(function (response) {
+      console.log('Sucesso:', response.data);
+      $http.get(`http://localhost:8080/compras/${idUser}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(function (response) {
+          $scope.listaCompras = response.data;
+        })
+    }).catch(function (error) {
+      console.error('Erro:', error);
+    });
+
+    $scope.fecharDetalhes();
+  };
+
+  $scope.ajustarAltura = function (event) {
+    const element = event.target;
+    element.style.height = 'auto';
+    element.style.height = (element.styleHeight) + 10;
+    element.style.height = (element.scrollHeight) + 'px';
+  };
 
 });

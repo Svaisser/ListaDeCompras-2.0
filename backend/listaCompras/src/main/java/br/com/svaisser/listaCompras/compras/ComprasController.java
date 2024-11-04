@@ -72,16 +72,18 @@ public class ComprasController {
           }
         }
 
-        // Salve sem o id definido
         this.comprasRepository.save(comprasModel);
         adicionados.add(comprasModel.getItem());
         System.out.println("Lista do User (" + idUser + ") -> " + comprasUser);
+        List<ComprasModel> listaAtualizada = this.comprasRepository.findByIdUser(idUser);
+        System.out.println(listaAtualizada);
       }
     }
 
     if (adicionados.isEmpty()) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum item novo adicionado.");
     } else {
+
       return ResponseEntity.status(HttpStatus.CREATED)
           .body(Map.of("mensagem", "Itens adicionados: " + String.join(", ", adicionados)));
     }
@@ -112,9 +114,9 @@ public class ComprasController {
     Optional<ComprasModel> compra = comprasRepository.findById(id);
     if (compra != null) {
       comprasRepository.deleteById(id);
-      return ResponseEntity.ok().body("Item excluído com sucesso: " + id);
+      return ResponseEntity.ok().body(Map.of("message", "Item excluído com sucesso", "id", id));
     } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não encontrado: " + id);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Item não encontrado", "id", id));
     }
   }
 }
