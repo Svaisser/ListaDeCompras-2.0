@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class ComprasController {
 
   @Autowired
-  private IComprasRepository comprasRepository;
+  private IComprasRepository IComprasRepository;
 
   @Autowired
   private IUserRepository IUserRepository;
@@ -43,7 +43,7 @@ public class ComprasController {
     if (!userId.equals(idUser)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-    List<ComprasModel> comprasList = this.comprasRepository.findByIdUser(idUser);
+    List<ComprasModel> comprasList = this.IComprasRepository.findByIdUser(idUser);
     return ResponseEntity.ok(comprasList);
   }
 
@@ -58,13 +58,13 @@ public class ComprasController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não autorizado ou inexistente");
       }
 
-      List<ComprasModel> comprasList = this.comprasRepository.findByIdUser(idUser);
+      List<ComprasModel> comprasList = this.IComprasRepository.findByIdUser(idUser);
 
       for (ComprasModel comprasUser : comprasList) {
 
         comprasModel.setIdUser(idUser);
 
-        var comprasExistentes = this.comprasRepository.findByItem(comprasModel.getItem());
+        var comprasExistentes = this.IComprasRepository.findByItem(comprasModel.getItem());
 
         if (comprasExistentes != null && !comprasExistentes.isEmpty()) {
           if (comprasExistentes.getIdUser() == comprasUser.getIdUser()) {
@@ -72,10 +72,10 @@ public class ComprasController {
           }
         }
 
-        this.comprasRepository.save(comprasModel);
+        this.IComprasRepository.save(comprasModel);
         adicionados.add(comprasModel.getItem());
         System.out.println("Lista do User (" + idUser + ") -> " + comprasUser);
-        List<ComprasModel> listaAtualizada = this.comprasRepository.findByIdUser(idUser);
+        List<ComprasModel> listaAtualizada = this.IComprasRepository.findByIdUser(idUser);
         System.out.println(listaAtualizada);
       }
     }
@@ -93,13 +93,13 @@ public class ComprasController {
   public ResponseEntity<?> updateCompra(HttpServletRequest request, @PathVariable Integer id,
       @RequestBody ComprasModel compraDetails) {
 
-    Optional<ComprasModel> compraOptional = comprasRepository.findById(id);
+    Optional<ComprasModel> compraOptional = IComprasRepository.findById(id);
     if (compraOptional.isPresent()) {
       ComprasModel compra = compraOptional.get();
       compra.setItem(compraDetails.getItem());
       compra.setQuantia(compraDetails.getQuantia());
       compra.setDescricao(compraDetails.getDescricao());
-      ComprasModel updatedCompra = comprasRepository.save(compra);
+      ComprasModel updatedCompra = IComprasRepository.save(compra);
       System.out.println(updatedCompra);
       return ResponseEntity.ok(updatedCompra);
     } else {
@@ -111,9 +111,9 @@ public class ComprasController {
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<?> delete(HttpServletRequest request, @PathVariable Integer id) {
 
-    Optional<ComprasModel> compra = comprasRepository.findById(id);
+    Optional<ComprasModel> compra = IComprasRepository.findById(id);
     if (compra != null) {
-      comprasRepository.deleteById(id);
+      IComprasRepository.deleteById(id);
       return ResponseEntity.ok().body(Map.of("message", "Item excluído com sucesso", "id", id));
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Item não encontrado", "id", id));

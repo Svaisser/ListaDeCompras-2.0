@@ -219,4 +219,18 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
     element.style.height = (element.scrollHeight) + 'px';
   };
 
+  $scope.enterCompras = function (event) {
+    if (event.which === 13) {  // 13 é o código da tecla Enter
+      event.preventDefault();
+      $scope.adicionarComprar();
+    }
+  };
+
+  // $scope.enterPesquisa = function (event) {
+  //   if (event.which === 13) {  // 13 é o código da tecla Enter
+  //     event.preventDefault();
+  //     $scope.pesquisarCompras();
+  //   }
+  // };
+
 });

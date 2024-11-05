@@ -34,20 +34,29 @@
 
   <div id="app">
     <div class="container">
-      <button ng-click="logoutUser()" >&lt;- Deslogar</button>
+      <button ng-click="logoutUser()">&lt;- Deslogar</button>
     </div>
     <main>
       <form action="" method="post" enctype="multipart/form-data">
         <h1>Compras da semana</h1>
+
         <div class="input-wrapper">
-          <input type="text" placeholder="Adicione um novo item" id="item" ng-model="frmCompras.item">
-          <input class="number" type="number" placeholder="Quantidade" id="quantia" ng-model="frmCompras.quantia">
+          <input type="text" placeholder="Adicione um novo item" id="item" ng-model="frmCompras.item"
+            ng-keypress="enterCompras($event)">
+          <input class="number" type="number" placeholder="Quantidade" id="quantia" ng-model="frmCompras.quantia"
+            ng-keypress="enterCompras($event)">
           <button type="button" ng-click="adicionarCompra()">Adicionar item</button>
 
         </div>
 
+        <div class="input-wrapper">
+          <input type="text" placeholder="O que está buscando?" id="search" ng-model="criterioBusca"
+            ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}">
+          <button type="button" ng-click="pesquisarCompras()">Pesquisar</button>
+        </div>
+
         <div role="list">
-          <div role="listbox" ng-repeat="compra in listaCompras">
+          <div role="listbox" ng-repeat="compra in listaCompras| filter:criterioBusca">
             <input type="checkbox" name="" id="" ng-click="selecionarCompra(compra.item)">
             <span>{{compra.item}} </span>
             <span class="quantia">{{compra.quantia}}</span>
