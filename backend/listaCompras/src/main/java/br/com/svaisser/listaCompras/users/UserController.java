@@ -61,7 +61,7 @@ public class UserController {
                 // Gerar o token JWT
                 String token = jwtUtil.generateToken(user.getId());
                 response.put("message", "Login bem-sucedido!");
-                response.put("token", token); // Enviar o token ao cliente
+                response.put("token", token);
                 response.put("idUser", String.valueOf(user.getId())); // Converte o ID para String
                 return ResponseEntity.ok(response);
             } else {

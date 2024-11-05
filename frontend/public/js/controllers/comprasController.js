@@ -4,6 +4,11 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
   $scope.compraEditando = {};
   $scope.ErroInclusao = '';
 
+  $scope.frmCompras = {
+    "item": "",
+    "quantia": ""
+  }
+
   const token = localStorage.getItem('token');
   const idUser = localStorage.getItem('idUser');
   console.log('ID do usuário: ', idUser);
@@ -40,28 +45,11 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
   $scope.adicionarCompra = function () {
     $scope.ErroInclusao = '';
     $scope.bd_compra = [];
+
     var item = $scope.frmCompras.item;
     var quantia = $scope.frmCompras.quantia;
     var compraIndex = $scope.listaCompras.findIndex(c => c.item === item);
 
-    if (compraIndex > -1) {
-      $scope.ErroInclusao = "Já existe esse item na lista.";
-      setTimeout(function () {
-        $scope.$apply(function () {
-          $scope.ErroInclusao = false;
-        });
-      }, 3000);
-      return;
-    }
-    if (quantia < 1) {
-      $scope.ErroInclusao = 'A quantitidade precisa ser no mínimo 1.';
-      setTimeout(function () {
-        $scope.$apply(function () {
-          $scope.ErroInclusao = false;
-        });
-      }, 3000);
-      return;
-    }
     if (item == "" || quantia == "") {
       $scope.ErroInclusao = 'Por favor, preencha todos os campos obrigatórios.';
       setTimeout(function () {
@@ -70,7 +58,24 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
         });
       }, 3000);
       return;
+    } else if (compraIndex > -1) {
+      $scope.ErroInclusao = "Já existe esse item na lista.";
+      setTimeout(function () {
+        $scope.$apply(function () {
+          $scope.ErroInclusao = false;
+        });
+      }, 3000);
+      return;
+    } else if (quantia < 1) {
+      $scope.ErroInclusao = 'A quantitidade precisa ser no mínimo 1.';
+      setTimeout(function () {
+        $scope.$apply(function () {
+          $scope.ErroInclusao = false;
+        });
+      }, 3000);
+      return;
     }
+
 
     $scope.bd_compra.push({
       "item": item,
@@ -108,7 +113,6 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
 
   $scope.excluirCompra = function (id) {
     $scope.itemParaExcluir = id;
-    console.log('Excluir ' + id);
     $scope.mostrarModalConfirmacao = true;
   };
 
@@ -119,9 +123,6 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       url: url,
       method: 'DELETE'
     }).then(function (response) {
-
-      console.log('Item excluído com sucesso:', response.data);
-
 
       $http.get(`http://localhost:8080/compras/${idUser}`, {
         headers: {

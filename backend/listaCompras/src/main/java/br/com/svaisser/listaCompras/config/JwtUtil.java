@@ -6,17 +6,24 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class JwtUtil {
 
     private String secretKey = "OdeioJava_123";
+    private static final int MAX_LOGINS = 3;
 
     public String generateToken(Integer idUser) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("loginCount", 0); // Contador de logins inicializad
+
         return Jwts.builder()
-                .setSubject(idUser.toString()) // Armazena o ID do usuário como String
+                .setClaims(claims)
+                .setSubject(idUser.toString())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 horas
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h de validade
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
@@ -31,6 +38,17 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token, Integer idUser) {
+        Claims claims = getClaims(token);
+
+        Integer loginCount = claims.get("loginCount", Integer.class);
+        if (loginCount >= MAX_LOGINS) {
+            throw new IllegalStateException("Token expirado por limite de logins.");
+        }
+
+        // Incrementa o contador de logins
+        claims.put("loginCount", loginCount + 1);
+        System.out.println("Contador de Login: " + loginCount + 1);
+
         return (extractIdUser(token).equals(idUser) && !isTokenExpired(token));
     }
 

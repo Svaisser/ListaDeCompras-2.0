@@ -21,6 +21,7 @@ public class ComprasModel {
     private String item;
     private Double quantia;
     private String descricao;
+    private String categoria;
 
     public boolean isEmpty() {
         return (id == null || id <= 0) && (idUser == null || idUser <= 0)
