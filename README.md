@@ -31,10 +31,15 @@ A **Lista de Compras 2.0** é uma aplicação web para gerenciar uma lista de co
 - [X] Sincronização em tempo real entre front-end e back-end
 - [X] Suporte para banco de dados persistente com PostgreSQL
 - [X] Implementação de autenticação de usuário
+- [X] Pesquisa pelo o item
 
 ## Roadmap
 
-- [ ] Criar interface para exportar a lista de compras como PDF
+- [ ] Criar interface para exportar a lista de compras como PDF ou CSV
+- [ ] Compartilhar a lista
+- [ ] Interface Mobile Responsiva
+- [ ] Criar categorias de itens
+- [ ] Histórico de compras
 
 ## Executando o Projeto
 
