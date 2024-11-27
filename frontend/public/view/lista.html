@@ -50,12 +50,12 @@
         </div>
 
         <div class="input-wrapper">
-          <input type="text" placeholder="O que está buscando?" id="search" ng-model="criterioBusca"
+          <input type="text" placeholder="Qual item estais buscando?" id="search" ng-model="criterioBusca"
             ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}">
         </div>
 
         <div role="list">
-          <div role="listbox" ng-repeat="compra in listaCompras| filter:criterioBusca">
+          <div role="listbox" ng-repeat="compra in listaCompras| filter: filtrarPorNome">
             <input type="checkbox" name="" id="" ng-click="selecionarCompra(compra.item)">
             <span>{{compra.item}} </span>
             <span class="quantia">{{compra.quantia}}</span>

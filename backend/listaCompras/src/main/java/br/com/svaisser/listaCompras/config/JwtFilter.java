@@ -24,7 +24,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
   private static final List<String> PUBLIC_ROUTES = Arrays.asList(
       "/users/login",
-      "/users/");
+      "/users/",
+      "/users/forgot-password",
+      "/users/reset-password");
 
   @SuppressWarnings("null")
   @Override

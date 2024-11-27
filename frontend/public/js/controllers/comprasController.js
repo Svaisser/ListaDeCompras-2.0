@@ -24,11 +24,7 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
         $scope.listaCompras = response.data;
       })
       .catch(error => {
-        console.error('Erro com Axios ao buscar compras:', error);
-        if (error.response) {
-          const errorMessage = error.response.data || 'Acesso negado. Verifique seu login.';
-          alert(errorMessage);
-        }
+        alert(error.data);
       });
   } else {
     alert('Precisa estar logado para acessar sua lista.');
@@ -41,6 +37,14 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
     window.location.href = 'http://localhost:3000/view/login.html';
   }
 
+  $scope.filtrarPorNome = function(compra) {
+    if (!$scope.criterioBusca) {
+      return true;
+    }
+    const criterio = $scope.criterioBusca.toLowerCase(); 
+    return compra.item && compra.item.toLowerCase().includes(criterio);
+  };
+  
 
   $scope.adicionarCompra = function () {
     $scope.ErroInclusao = '';
