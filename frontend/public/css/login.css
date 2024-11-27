@@ -19,6 +19,8 @@
 a {
     text-decoration: none;
     color: var(--content-secondary);
+    display: flex;
+    justify-content: center;
 }
 
 body {
@@ -40,6 +42,7 @@ header {
 h1 {
     font-size: 24px;
     color: var(--content-primary);
+    margin-inline: 32px;
 }
 
 .text {
@@ -48,7 +51,6 @@ h1 {
     justify-content: center;
     margin-bottom: 24px;
 }
-
 
 main {
     display: flex;
@@ -67,7 +69,7 @@ form {
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 12px;
+    gap: 16px;
 }
 
 .input-wrapper input {
@@ -80,7 +82,7 @@ form {
 }
 
 .input-wrapper button {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     font-size: 16px;
     height: 44px;
     border-radius: 12px;
@@ -129,4 +131,14 @@ form {
 
 .warning .text-container img , .sucesso .text-container img {
     margin-right: 8px;
+}
+
+.btnBack {
+    position: absolute;
+}
+
+h4 {
+    display: flex;
+    justify-content: center;
+    color: var(--content-secondary-hover);
 }

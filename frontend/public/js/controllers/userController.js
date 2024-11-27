@@ -98,12 +98,10 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
       return;
     }
 
-    // Faz a requisição de login e armazena o token JWT
     $http.post('http://localhost:8080/users/login', $scope.frmLogin).then(function (response) {
       const message = response.data.message || response.data;
       console.log(message);
 
-      // Armazena o token JWT no localStorage
       const token = response.data.token;
       const idUser = response.data.idUser;
       localStorage.setItem("token", token);
@@ -119,7 +117,7 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
         "username": "",
         "password": ""
       };
-      $window.location.href = "lista.html"; // Redireciona após o login
+      $window.location.href = "lista.html";
     }).catch(function (error) {
       console.error('Erro:', error);
 
@@ -143,4 +141,67 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
     }
   };
 
+  // ÁREA DO ESQUECI MINHA SENHA
+
+  $scope.ErroEsqueci = '';
+  $scope.SucessoEsqueci = '';
+
+  $scope.esqueciUser = {
+    "username": "",
+    "answer": "",
+    "newPassword": "",
+  }
+
+  $scope.getSecurityQuestion = function () {
+    if (!$scope.esqueciUser.username) {
+      $scope.ErroEsqueci = 'Por favor, informe o nome de usuário';
+      setTimeout(function () {
+        $scope.$apply(function () {
+          $scope.ErroEsqueci = false;
+        });
+      }, 5000);
+      return;
+    }
+
+    $http.post('http://localhost:8080/users/verify-security', $scope.esqueciUser)
+      .then(response => {
+        const question = response.data.securityQuestion;
+        document.getElementById('security-question').innerText = question;
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+        $scope.ErroEsqueci = '';
+      })
+      .catch(error => {
+        $scope.ErroEsqueci = 'Usuário não encontrado ou erro ao buscar pergunta';
+        setTimeout(function () {
+          $scope.$apply(function () {
+            $scope.ErroEsqueci = false;
+          });
+        }, 5000);
+        return;
+      });
+  }
+
+  $scope.resetPassword = function () {
+    if (!$scope.esqueciUser.answer || !$scope.esqueciUser.newPassword) {
+      $scope.ErroEsqueci = 'Por favor, preencha todos os campos.';
+      return;
+    }
+
+    $http.post('http://localhost:8080/users/reset-password', $scope.esqueciUser)
+      .then(response => {
+        alert('Senha redefinida com sucesso!');
+        window.location.href = 'http://localhost:3000/view/login.html';
+      })
+      .catch(error => {
+        $scope.ErroEsqueci = 'Resposta incorreta ou erro ao redefinir a senha';
+      });
+  }
+
+  $scope.enterEsqueci = function (event) {
+    if (event.which === 13) {  // 13 é o código da tecla Enter
+      event.preventDefault();
+      $scope.loginUser();
+    }
+  };
 });

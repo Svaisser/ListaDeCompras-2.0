@@ -90,21 +90,20 @@ public class UserController {
     public ResponseEntity<?> verifySecurity(@RequestBody Map<String, String> request) {
         try {
             String username = request.get("username");
-            String answer = request.get("answer");
 
+            // Buscar o usuário no banco de dados
             UserModel user = userRepository.findByUsername(username);
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ErrorResponse("Usuário não encontrado", HttpStatus.NOT_FOUND.value()));
             }
 
-            BCrypt.Result result = BCrypt.verifyer().verify(answer.toCharArray(), user.getSecurityAnswer());
-            if (result.verified) {
-                return ResponseEntity.ok().body(Map.of("message", "Resposta correta"));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ErrorResponse("Resposta de segurança incorreta", HttpStatus.UNAUTHORIZED.value()));
-            }
+            // Enviar a pergunta de segurança para o front-end
+            Map<String, String> response = new HashMap<>();
+            System.out.println("Security Question: " + user.getSecurityQuestion());
+            response.put("securityQuestion", user.getSecurityQuestion());
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Erro interno: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
@@ -115,15 +114,25 @@ public class UserController {
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
         try {
             String username = request.get("username");
+            String userAnswer = request.get("answer");
             String newPassword = request.get("newPassword");
 
+            // Buscar o usuário no banco de dados
             UserModel user = userRepository.findByUsername(username);
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ErrorResponse("Usuário não encontrado", HttpStatus.NOT_FOUND.value()));
             }
 
-            var passwordHash = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
+            // Verificar se a resposta fornecida corresponde ao hash da resposta de segurança
+            BCrypt.Result result = BCrypt.verifyer().verify(userAnswer.toCharArray(), user.getSecurityAnswer());
+            if (!result.verified) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ErrorResponse("Resposta de segurança incorreta", HttpStatus.UNAUTHORIZED.value()));
+            }
+
+            // Se a resposta estiver correta, atualizar a senha
+            String passwordHash = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
             user.setPassword(passwordHash);
             userRepository.save(user);
 
@@ -133,6 +142,5 @@ public class UserController {
                     .body(new ErrorResponse("Erro interno: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
-
 
 }
