@@ -9,13 +9,15 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
     "name": "",
     "username": "",
     "password": "",
+    "securityAnswer": "",
+    "securityQuestion": ""
   }
 
   $scope.createUser = function () {
 
     $scope.ErroCadastro = '';
 
-    if (!$scope.cadastroUser.name || !$scope.cadastroUser.username || !$scope.cadastroUser.password) {
+    if (!$scope.cadastroUser.name || !$scope.cadastroUser.username || !$scope.cadastroUser.password || !$scope.cadastroUser.securityAnswer || !$scope.cadastroUser.securityQuestion) {
       $scope.ErroCadastro = 'Todos os campos são obrigatórios!';
       setTimeout(function () {
         $scope.$apply(function () {
@@ -51,7 +53,9 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
         $scope.cadastroUser = {
           "name": "",
           "username": "",
-          "password": ""
+          "password": "",
+          "securityAnswer": "",
+          "securityQuestion": ""
         };
       })
       .catch(function (error) {
@@ -148,7 +152,7 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
 
   $scope.esqueciUser = {
     "username": "",
-    "answer": "",
+    "securityAnswer": "",
     "newPassword": "",
   }
 
@@ -165,8 +169,8 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
 
     $http.post('http://localhost:8080/users/verify-security', $scope.esqueciUser)
       .then(response => {
-        const question = response.data.securityQuestion;
-        document.getElementById('security-question').innerText = question;
+        const securityQuestion = response.data.securityQuestion;
+        document.getElementById('security-question').innerText = securityQuestion;
         document.getElementById('step1').style.display = 'none';
         document.getElementById('step2').style.display = 'block';
         $scope.ErroEsqueci = '';
@@ -183,8 +187,22 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
   }
 
   $scope.resetPassword = function () {
-    if (!$scope.esqueciUser.answer || !$scope.esqueciUser.newPassword) {
+    if (!$scope.esqueciUser.securityAnswer || !$scope.esqueciUser.newPassword) {
       $scope.ErroEsqueci = 'Por favor, preencha todos os campos.';
+      return;
+    }
+
+    $scope.getPasswordLength = function () {
+      return $scope.esqueciUser.newPassword ? $scope.esqueciUser.newPassword.length : 0;
+    };
+
+    if ($scope.getPasswordLength() < 8) {
+      $scope.ErroEsqueci = 'A senha deve ter pelo menos 8 caracteres!';
+      setTimeout(function () {
+        $scope.$apply(function () {
+          $scope.ErroEsqueci = false;
+        });
+      }, 5000);
       return;
     }
 
@@ -194,7 +212,7 @@ angular.module('meuApp').controller('userController', function ($scope, $http, $
         window.location.href = 'http://localhost:3000/view/login.html';
       })
       .catch(error => {
-        $scope.ErroEsqueci = 'Resposta incorreta ou erro ao redefinir a senha';
+        $scope.ErroEsqueci = 'Resposta incorreta!';
       });
   }
 

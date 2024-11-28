@@ -37,14 +37,14 @@
         <h1>Crie sua conta</h1>
       </div>
 
-      <div class="input-wrapper">
+      <div class="input-wrapper" id="cadastroForm">
 
-        <input type="text" placeholder="Nome completo" id="name" ng-model="cadastroUser.name" ng-keypress="enterCadastro($event)">
-        <input type="text" placeholder="Username" id="username" ng-model="cadastroUser.username" ng-keypress="enterCadastro($event)">
-        <input type="password" placeholder="Senha" id="password" ng-model="cadastroUser.password" ng-keypress="enterCadastro($event)">
-        <input type="text" placeholder="Pergunta de segurança" id="answer" ng-model="cadastroUser.answer" ng-keypress="enterCadastro($event)">
-        <input type="text" placeholder="Resposta da pergunta" id="question" ng-model="cadastroUser.question" ng-keypress="enterCadastro($event)">
-        <button type="button" ng-click="createUser()">Cadastrar</button>
+        <input type="text" placeholder="Nome completo" id="name" ng-model="cadastroUser.name" ng-keypress="enterCadastro($event)" style="grid-area: A;">
+        <input type="text" placeholder="Username" id="username" ng-model="cadastroUser.username" ng-keypress="enterCadastro($event)" style="grid-area: B;">
+        <input type="text" placeholder="Pergunta de segurança" id="question" ng-model="cadastroUser.securityQuestion" ng-keypress="enterCadastro($event)" style="grid-area: C;">
+        <input type="text" placeholder="Resposta da pergunta" id="answer" ng-model="cadastroUser.securityAnswer" ng-keypress="enterCadastro($event)" style="grid-area: D;">
+        <input type="password" placeholder="Senha" id="password" ng-model="cadastroUser.password" ng-keypress="enterCadastro($event)" style="grid-area: E;">
+        <button type="button" ng-click="createUser()" style="grid-area: F;">Cadastrar</button>
       </div>
 
       <div class="text">

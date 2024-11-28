@@ -142,3 +142,17 @@ h4 {
     justify-content: center;
     color: var(--content-secondary-hover);
 }
+
+#cadastroForm{
+    display: grid;
+    gap: 16px;
+    grid-template-areas: 
+    "A B"
+    "C D"
+    "E F";
+    box-sizing: content-box;
+}
+
+#cadastroForm input {
+    height: 44px;
+}
