@@ -32,6 +32,7 @@ A **Lista de Compras 2.0** é uma aplicação web para gerenciar uma lista de co
 - [X] Suporte para banco de dados persistente com PostgreSQL
 - [X] Implementação de autenticação de usuário
 - [X] Pesquisa pelo o item
+- [X] Recuperação de senha usando pergunta de segurança
 
 ## Roadmap
 
