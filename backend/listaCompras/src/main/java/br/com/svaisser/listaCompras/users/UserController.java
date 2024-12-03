@@ -114,8 +114,11 @@ public class UserController {
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
         try {
             String username = request.get("username");
-            String userAnswer = request.get("answer");
+            String securityAnswer = request.get("securityAnswer");
             String newPassword = request.get("newPassword");
+            System.out.println("username: " + username);
+            System.out.println("securityAnswer: " + securityAnswer);
+            System.out.println("newPassword: " + newPassword);
 
             // Buscar o usuário no banco de dados
             UserModel user = userRepository.findByUsername(username);
@@ -123,9 +126,9 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ErrorResponse("Usuário não encontrado", HttpStatus.NOT_FOUND.value()));
             }
-
+            
             // Verificar se a resposta fornecida corresponde ao hash da resposta de segurança
-            BCrypt.Result result = BCrypt.verifyer().verify(userAnswer.toCharArray(), user.getSecurityAnswer());
+            BCrypt.Result result = BCrypt.verifyer().verify(securityAnswer.toCharArray(), user.getSecurityAnswer());
             if (!result.verified) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new ErrorResponse("Resposta de segurança incorreta", HttpStatus.UNAUTHORIZED.value()));

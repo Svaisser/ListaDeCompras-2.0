@@ -60,30 +60,30 @@ public class ComprasController {
 
       List<ComprasModel> comprasList = this.IComprasRepository.findByIdUser(idUser);
 
+      if (comprasList.isEmpty()) {
+        this.IComprasRepository.save(comprasModel);
+        adicionados.add(comprasModel.getItem());
+        continue;
+      }
+
       for (ComprasModel comprasUser : comprasList) {
-
         comprasModel.setIdUser(idUser);
-
         var comprasExistentes = this.IComprasRepository.findByItem(comprasModel.getItem());
 
         if (comprasExistentes != null && !comprasExistentes.isEmpty()) {
           if (comprasExistentes.getIdUser() == comprasUser.getIdUser()) {
-            continue; // Itens já existem, não adicionar
+            continue; 
           }
         }
 
         this.IComprasRepository.save(comprasModel);
         adicionados.add(comprasModel.getItem());
-        System.out.println("Lista do User (" + idUser + ") -> " + comprasUser);
-        List<ComprasModel> listaAtualizada = this.IComprasRepository.findByIdUser(idUser);
-        System.out.println(listaAtualizada);
       }
     }
 
     if (adicionados.isEmpty()) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum item novo adicionado.");
     } else {
-
       return ResponseEntity.status(HttpStatus.CREATED)
           .body(Map.of("mensagem", "Itens adicionados: " + String.join(", ", adicionados)));
     }
