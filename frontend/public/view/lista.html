@@ -70,14 +70,20 @@
         </div>
       </form>
 
+      <div class="sucesso" ng-show="SucessoInclusao">
+        <div class="text-container">
+          <img src="../assets/icons/icons8-sucesso.svg" alt="">
+          <p>{{SucessoInclusao}}</p>
+        </div>
+      </div>
 
       <div class="warning" ng-show="exclusaoAviso">
         <div class="text-container">
           <img src="../assets/icons/warning-circle.svg" alt="">
           <p>O item foi removido da lista</p>
         </div>
-
       </div>
+
       <div class="warning" ng-show="ErroInclusao">
         <div class="text-container">
           <img src="../assets/icons/warning-circle.svg" alt="">

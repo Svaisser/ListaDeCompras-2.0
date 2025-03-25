@@ -163,21 +163,30 @@ div[role="listbox"] img {
 .warning {
     display: flex;
     position: absolute;
-    top: 19%;
-    left: 28%;
     width: 100%;
-    max-width: 620px;
+    max-width: 640px;
     padding: 16px;
     border-radius: 12px;
     background-color: rgba(201, 56, 71);
     color: white;
 }
 
-.warning .text-container {
+.sucesso {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    max-width: 640px;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: rgb(56, 201, 112);
+    color: white;
+}
+
+.text-container {
     display: flex;
 }
 
-.warning .text-container img {
+.text-container img {
     margin-right: 8px;
 }
 

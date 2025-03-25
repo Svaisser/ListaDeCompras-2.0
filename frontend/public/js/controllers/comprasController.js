@@ -3,6 +3,7 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
   $scope.listaCompras = [];
   $scope.compraEditando = {};
   $scope.ErroInclusao = '';
+  $scope.exclusaoAviso = '';
 
   $scope.frmCompras = {
     "item": "",
@@ -97,6 +98,12 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       method: 'POST',
       data: $scope.bd_compra
     }).then(function (response) {
+      $scope.SucessoInclusao = response.data.mensagem;
+      setTimeout(function () {
+        $scope.$apply(function () {
+          $scope.SucessoInclusao = false;
+        });
+      }, 3000);
       console.log('Sucesso:', response.data);
 
       return $http.get(`http://localhost:8080/compras/${idUser}`, {
@@ -135,7 +142,12 @@ angular.module('meuApp').controller('listaCompras', function ($scope, $http, $wi
       })
         .then(function (response) {
           $scope.listaCompras = response.data;
-          console.log('Lista de compras atualizada:', $scope.listaCompras);
+          $scope.exclusaoAviso = true;
+          setTimeout(function () {
+            $scope.$apply(function () {
+              $scope.ErroInclusao = false;
+            });
+          }, 3000);
         })
         .catch(function (error) {
           console.error('Erro ao recarregar a lista de compras:', error);
